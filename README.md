@@ -1,1 +1,1 @@
-# Cube
+# Tetrahedron
