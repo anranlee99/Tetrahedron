@@ -159,5 +159,26 @@ window.onload = function () {
         }
     };
 
+    //touch supoprt
+    canvas.addEventListener('touchstart', function(e) {
+        dragging = true;
+        lastX = e.touches[0].clientX;
+        lastY = e.touches[0].clientY;
+    });
+    canvas.addEventListener('touchend', function() {
+        dragging = false;
+    });
+    canvas.addEventListener('touchmove', function(e) {
+        if (dragging) {
+            const dx = e.touches[0].clientX - lastX;
+            const dy = e.touches[0].clientY - lastY;
+            lastX = e.touches[0].clientX;
+            lastY = e.touches[0].clientY;
+            tetrahedron.rotate('y', dx * 0.01);
+            tetrahedron.rotate('x', dy * 0.01);
+            tetrahedron.draw();
+        }
+    });
+
     tetrahedron.draw();
 };
