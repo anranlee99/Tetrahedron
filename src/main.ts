@@ -174,8 +174,8 @@ window.onload = function () {
             const dy = e.touches[0].clientY - lastY;
             lastX = e.touches[0].clientX;
             lastY = e.touches[0].clientY;
-            tetrahedron.rotate('y', dx * 0.01);
-            tetrahedron.rotate('x', dy * 0.01);
+            tetrahedron.rotate('y', -dx * 0.01);
+            tetrahedron.rotate('x', -dy * 0.01);
             tetrahedron.draw();
         }
     });
