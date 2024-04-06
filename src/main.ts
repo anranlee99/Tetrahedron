@@ -1,4 +1,4 @@
-class Cube {
+class Tetrahedron {
     ctx: CanvasRenderingContext2D;
     size: number;
     vertices: number[][];
@@ -13,27 +13,21 @@ class Cube {
         this.ctx = context;
         this.size = size;
         this.vertices = [
-            [-1, -1, -1], 
-            [1, -1, -1], 
-            [1, 1, -1], 
-            [-1, 1, -1],
-            [-1, -1, 1], 
-            [1, -1, 1], 
-            [1, 1, 1],
-            [-1, 1, 1]
+            [0, 0, 1],
+            [-1, -1, -1],
+            [1, -1, -1],
+            [0, 1, -1]
         ];
 
         this.faces = [
-            [0, 1, 2, 3], 
-            [1, 5, 6, 2], 
-            [5, 4, 7, 6],
-            [4, 0, 3, 7], 
-            [0, 4, 5, 1], 
-            [3, 2, 6, 7],
+            [0, 1, 2],
+            [0, 1, 3],
+            [0, 2, 3],
+            [1, 2, 3]
         ];
 
-        this.colors = ["red", "green", "blue", "yellow", "purple", "orange"];
-        
+        this.colors = ["red", "green", "blue", "yellow"];
+
         this.rotationX = 0;
         this.rotationY = 0;
         this.fov = Math.PI;  // Example value, can be adjusted
@@ -60,13 +54,13 @@ class Cube {
     drawFace(face: number[], color: string) {
         // Project the vertices of the face
         const projectedVertices = face.map(index => this.project(this.vertices[index]));
-    
+
         // Calculate the winding order using the first three vertices of the face
         const [A, B, C] = projectedVertices;
         const AB = [B[0] - A[0], B[1] - A[1]];
         const AC = [C[0] - A[0], C[1] - A[1]];
         const crossZ = AB[0] * AC[1] - AB[1] * AC[0];
-    
+
         // Draw the face only if the winding is clockwise (crossZ > 0)
         if (crossZ > 0) {
             this.ctx.beginPath();
@@ -81,7 +75,6 @@ class Cube {
             this.ctx.stroke();
         }
     }
-    
 
     calculateNormal(face: number[]) {
         let v1 = this.vertices[face[0]];
@@ -114,8 +107,6 @@ class Cube {
         const factor = this.fov / (this.viewerDistance + scaledVertex[2]);
         return [scaledVertex[0] * factor, scaledVertex[1] * factor];
     }
-    
-    
 }
 
 window.onload = function() {
@@ -123,7 +114,7 @@ window.onload = function() {
     canvas.width = window.innerWidth / 2;
     canvas.height = canvas.width;
     const context = canvas.getContext('2d') as CanvasRenderingContext2D;
-    const cube = new Cube(context, 500);
+    const tetrahedron = new Tetrahedron(context, 500);
     let lastX: number, lastY: number, dragging = false;
 
     canvas.onmousedown = function(e) {
@@ -142,9 +133,9 @@ window.onload = function() {
             const dy = e.clientY - lastY;
             lastX = e.clientX;
             lastY = e.clientY;
-            cube.rotate('y', dx * 0.01);
-            cube.rotate('x', dy * 0.01);
-            cube.draw();
+            tetrahedron.rotate('y', dx * 0.01);
+            tetrahedron.rotate('x', dy * 0.01);
+            tetrahedron.draw();
         }
     };
 
@@ -163,11 +154,11 @@ window.onload = function() {
             const dy = e.touches[0].clientY - lastY;
             lastX = e.touches[0].clientX;
             lastY = e.touches[0].clientY;
-            cube.rotate('y', dx * 0.01);
-            cube.rotate('x', dy * 0.01);
-            cube.draw();
+            tetrahedron.rotate('y', dx * 0.01);
+            tetrahedron.rotate('x', dy * 0.01);
+            tetrahedron.draw();
         }
     });
 
-    cube.draw();
+    tetrahedron.draw();
 };
